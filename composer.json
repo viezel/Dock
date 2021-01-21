@@ -1,0 +1,32 @@
+{
+    "name": "viezel/dock",
+    "description": "Docker for Laravel Development",
+    "keywords": ["docker", "laravel"],
+    "homepage": "https://github.com/viezel/dock",
+    "license": "MIT",
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/contracts": "^8.0|^9.0",
+        "illuminate/support": "^8.0|^9.0"
+    },
+    "bin": [
+        "bin/dock"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Viezel\\Dock\\": "src"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Viezel\\Dock\\DockServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
