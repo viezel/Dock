@@ -13,6 +13,13 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 PURPLE='\033[0;35m'
 
+# Is Docker running?
+if ! docker info > /dev/null 2>&1; then
+    echo -e "${RED}Error: Docker is not running${NC}" >&2
+
+    exit 1
+fi
+
 # Is the environment running
 PSRESULT="$(docker-compose ps -q)"
 if [ ! -z "$PSRESULT" ]; then
