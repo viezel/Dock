@@ -10,6 +10,8 @@ This setup includes:
  * Redis Caching
  * Redis Queue
  * Mailhog (local mail development)
+ * Xdebug
+ * Node, npm and yarn
 
 ## Installation 
 
