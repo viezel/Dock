@@ -20,6 +20,13 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
+# Check if we have installed Dock
+if ! test -f "docker-compose.yml"; then
+    echo "Setting up Dock..."
+
+    php artisan dock:install
+fi
+
 # Is the environment running
 PSRESULT="$(docker-compose ps -q)"
 if [ ! -z "$PSRESULT" ]; then
@@ -37,28 +44,27 @@ function waitForMysql {
 }
 
 function startWorker() {
-    echo "Starting queue worker"
+    echo "Starting queue worker..."
     osascript -e 'tell application "Terminal" to do script "cd '$PWD' && docker-compose exec php php artisan queue:work --tries=1"'
     echo -e "${GREEN}Created a Terminal window and started queue worker! ${NC}"
 }
 
 # BUILD
 if [ "$1" = "build" ]; then
-    echo "Building containers"
+    echo "Building containers..."
     docker-compose build
-    echo "Successfully built!"
-    echo -e "${GREEN}Completed successfully! ${NC}"
+    echo -e "${GREEN}Successfully built! ${NC}"
     exit 0
 fi
 
 # UP
 if [ "$1" == "up" ] || [ "$1" == "start" ]; then
-    echo "Upping containers"
+    echo "Upping containers..."
     docker-compose up -d --remove-orphans
 
     waitForMysql
 
-    echo "Migrate"
+    echo "Migrating..."
     docker-compose exec php php artisan migrate
     echo -e "${GREEN}Successfully upped and migrated! ${NC}"
 
@@ -67,7 +73,7 @@ fi
 
 # DOWN
 if [ "$1" == "down" ] || [ "$1" == "stop" ]; then
-    echo "Downing containers"
+    echo "Downing containers..."
     docker-compose stop
     echo -e "${GREEN}Stopped successfully! ${NC}"
     exit 0
@@ -90,7 +96,7 @@ if [ "$1" = "install" ]; then
     echo "installing composer dependencies"
     docker-compose exec php composer install
 
-    echo "Migrat"
+    echo "Migrating"
     docker-compose exec php php artisan migrate
 
     echo "Seeding"
@@ -111,32 +117,30 @@ fi
 
 # REMOVE
 if [ "$1" = "remove" ]; then
-    echo "Removing containers"
+    echo "Removing containers..."
     docker-compose down
-    echo -e "${GREEN}Successfully stopped ${NC}"
+    echo -e "${GREEN}Successfully stopped and removed ${NC}"
     exit 0
 fi
 
 # RESET
 if [ "$1" = "reset" ]; then
-    echo "Resetting containers"
 
-    echo "Removing containers"
+    echo "Removing containers..."
     docker-compose down
-    echo "Successfully removed!"
+    echo "${GREEN}Successfully removed!${NC}"
 
-    echo "Building containers"
-
+    echo "Building containers..."
     docker-compose build
-    echo "Successfully built!"
+    echo "${GREEN}Successfully built!${NC}"
 
-    echo "Upping containers"
+    echo "Upping containers..."
     docker-compose up -d --remove-orphans
-    echo "Successfully upped!"
+    echo "${GREEN}Successfully upped!${NC}"
 
     waitForMysql
 
-    echo "Installing"
+    echo "Installing..."
     docker-compose exec php php artisan migrate --seed
 
     echo -e "${GREEN}Successfully reset${NC}"
@@ -200,7 +204,7 @@ if [ "$1" == "artisan" ] || [ "$1" == "art" ]; then
 fi
 
 # COMPOSER
-if [ "$1" == "composer" ] || [ "$1" == "comp" ]; then
+if [ "$1" == "composer" ] || [ "$1" == "c" ]; then
     shift 1
     if [ "$EXEC" == "yes" ]; then
         docker-compose exec php composer "$@"
@@ -270,8 +274,8 @@ echo -e "${YELLOW}Laravel commands: ${NC}"
 echo -e " ${GREEN}"
 echo -e "  * ssh        SSH into laravel"
 echo -e "  * ssh-mysql  SSH into mysql"
-echo -e "  * dusk       run dusk tests. '$BASHCMD dusk' or append: 'bash $BASHCMD dusk --group=foo' "
-echo -e "  * comp       run composer commands. '$BASHCMD comp dump-autoload'"
+echo -e "  * dusk       run dusk tests. '$BASHCMD dusk' or append: '$BASHCMD dusk --group=foo' "
+echo -e "  * c       run composer commands. '$BASHCMD c dump-autoload'"
 echo -e "  * composer   run composer commands. '$BASHCMD composer dump-autoload'"
 echo -e "  * art        run artisan commands. '$BASHCMD art cache:clear'"
 echo -e "  * artisan    run artisan commands."
