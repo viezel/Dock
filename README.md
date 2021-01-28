@@ -68,8 +68,17 @@ Laravel commands:
   * rl         route list. 'dock rl --path=api/foo/bar'
   * migrate    migrate the app
   * redis      start redis cli
+  * expose     share site via Expose
  
 ------
+ 
+JS commands: 
+ 
+  * node       run node commands
+  * npm        run npm commands
+  * npx        run npx commands
+  * yarn       run yarn commands
+
 ```
 
 ## Credits

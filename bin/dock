@@ -248,8 +248,9 @@ fi
 
 # MYSQL
 if [ "$1" == "ssh-mysql" ]; then
+    shift 1
     if [ "$EXEC" == "yes" ]; then
-        docker-compose exec mysql /bin/bash
+        docker-compose exec mysql bash -c 'MYSQL_PWD=${MYSQL_PASSWORD} mysql -u ${MYSQL_USER} ${MYSQL_DATABASE}'
     else
         notRunning
     fi
@@ -262,7 +263,9 @@ if [ "$1" == "ssh-mysql" ]; then
     exit 0
 fi
 
+# Worker
 if [ "$1" == "worker" ]; then
+    shift 1
     if [ "$EXEC" == "yes" ]; then
         startWorker
     else
@@ -271,6 +274,61 @@ if [ "$1" == "worker" ]; then
     exit 0
 fi
 
+##########
+### JS ###
+##########
+if [ "$1" == "node" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker-compose exec php node "$@"
+    else
+        notRunning
+    fi
+    exit 0
+fi
+
+if [ "$1" == "npm" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker-compose exec php npm "$@"
+    else
+        notRunning
+    fi
+    exit 0
+fi
+
+if [ "$1" == "npx" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker-compose exec php npx "$@"
+    else
+        notRunning
+    fi
+    exit 0
+fi
+
+if [ "$1" == "yarn" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker-compose exec php yarn "$@"
+    else
+        notRunning
+    fi
+    exit 0
+fi
+
+if [ "$1" == "expose" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker run --init beyondcodegmbh/expose-server share http://host.docker.internal:"$APP_PORT" \
+            --server-host=dock.test.site \
+            --server-port=8080 \
+            "$@"
+    else
+        notRunning
+    fi
+    exit 0
+fi
 
 # INFO
 if [ "$1" != "" ]; then
@@ -312,6 +370,16 @@ echo -e "  * cc         clear cache"
 echo -e "  * rl         route list. '$BASHCMD rl --path=api/foo/bar'"
 echo -e "  * migrate    migrate the app"
 echo -e "  * redis      start redis cli"
+echo -e "  * expose     share site via Expose"
+echo -e " ${NC}"
+echo -e "------"
+echo -e " "
+echo -e "${YELLOW}JS commands: ${NC}"
+echo -e " ${GREEN}"
+echo -e "  * node       run node commands"
+echo -e "  * npm        run npm commands"
+echo -e "  * npx        run npx commands"
+echo -e "  * yarn       run yarn commands"
 echo -e " ${NC}"
 echo -e "------"
 echo -e " "
