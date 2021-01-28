@@ -11,7 +11,7 @@ This setup includes:
  * Redis Queue
  * Mailhog (local mail development)
  * Xdebug
- * Node, npm and yarn
+ * Node, npm, npx and yarn. Use `dock npm` etc.
  * Laravel Dusk E2E browser testing. Use `dock dusk`
 
 ## Installation 
