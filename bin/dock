@@ -29,11 +29,19 @@ fi
 
 # Is the environment running
 PSRESULT="$(docker-compose ps -q)"
-if [ ! -z "$PSRESULT" ]; then
+if docker-compose ps | grep 'Exit' &> /dev/null; then
+    docker-compose down > /dev/null 2>&1
+    EXEC="no"
+elif [ -n "$PSRESULT" ]; then
     EXEC="yes"
 else
     EXEC="no"
 fi
+
+function notRunning {
+    echo -e "${RED}Notice: Dock is not running.${NC} Run: 'dock up'" >&2
+    exit 1
+}
 
 # wait for mysql to be ready
 function waitForMysql {
@@ -165,7 +173,7 @@ if [ "$1" == "tinker" ]; then
     if [ "$EXEC" == "yes" ]; then
         docker-compose exec php php artisan tinker
     else
-        docker-compose run --rm php php artisan tinker
+        notRunning
     fi
     exit 0
 fi
@@ -176,7 +184,7 @@ if [ "$1" == "cc" ]; then
     if [ "$EXEC" == "yes" ]; then
         docker-compose exec php php artisan cache:clear "$@"
     else
-        docker-compose run --rm php php artisan cache:clear "$@"
+        notRunning
     fi
     exit 0
 fi
@@ -187,7 +195,7 @@ if [ "$1" == "rl" ]; then
     if [ "$EXEC" == "yes" ]; then
         docker-compose exec php php artisan route:list "$@"
     else
-        docker-compose run --rm php php artisan route:list "$@"
+        notRunning
     fi
     exit 0
 fi
@@ -198,7 +206,7 @@ if [ "$1" == "artisan" ] || [ "$1" == "art" ]; then
     if [ "$EXEC" == "yes" ]; then
         docker-compose exec php php artisan "$@"
     else
-        docker-compose run --rm php php artisan "$@"
+        notRunning
     fi
     exit 0
 fi
@@ -209,7 +217,7 @@ if [ "$1" == "composer" ] || [ "$1" == "c" ]; then
     if [ "$EXEC" == "yes" ]; then
         docker-compose exec php composer "$@"
     else
-        docker-compose run --rm php composer "$@"
+        notRunning
     fi
     exit 0
 fi
@@ -218,10 +226,9 @@ fi
 if [ "$1" == "dusk" ]; then
     shift 1
     if [ "$EXEC" == "yes" ]; then
-        docker-compose -f docker-compose.yml -f docker-compose.dusk.yml up -d
-        docker-compose -f docker-compose.yml -f docker-compose.dusk.yml run php php artisan dusk "$@"
+        docker-compose exec -e "APP_URL=http://laravel.test" -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" php php artisan dusk "$@"
     else
-        docker-compose run --rm php bash dusk.sh "$@"
+        notRunning
     fi
     exit 0
 fi
@@ -229,8 +236,11 @@ fi
 
 # MYSQL
 if [ "$1" == "ssh-mysql" ]; then
-    docker-compose exec mysql /bin/bash
-
+    if [ "$EXEC" == "yes" ]; then
+        docker-compose exec mysql /bin/bash
+    else
+        notRunning
+    fi
     ## Debug MySQL
     ## SET GLOBAL general_log = 'ON';
     ## SHOW VARIABLES LIKE "general_log%";
@@ -241,7 +251,11 @@ if [ "$1" == "ssh-mysql" ]; then
 fi
 
 if [ "$1" == "worker" ]; then
-    startWorker
+    if [ "$EXEC" == "yes" ]; then
+        startWorker
+    else
+        notRunning
+    fi
     exit 0
 fi
 
