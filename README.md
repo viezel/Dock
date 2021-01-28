@@ -56,7 +56,7 @@ Laravel commands:
   * ssh        SSH into laravel
   * ssh-mysql  SSH into mysql
   * dusk       run dusk tests. 'dock dusk' or append: 'dock dusk --group=foo' 
-  * comp       run composer commands. 'dock comp dump-autoload'
+  * c          run composer commands. 'dock c dump-autoload'
   * composer   run composer commands. 'dock composer dump-autoload'
   * art        run artisan commands. 'dock art view:clear'
   * artisan    run artisan commands.
