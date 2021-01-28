@@ -24,6 +24,8 @@ class DockServiceProvider extends ServiceProvider implements DeferrableProvider
 
             $environment = file_get_contents(base_path('.env'));
             $environment = str_replace('DB_HOST=127.0.0.1', 'DB_HOST=mysql', $environment);
+            $environment = str_replace('DB_USERNAME=root', 'DB_USERNAME=dock', $environment);
+            $environment = str_replace('DB_PASSWORD=', 'DB_PASSWORD=secret', $environment);
             $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);
             $environment = str_replace('QUEUE_CONNECTION=sync', 'QUEUE_CONNECTION=redis', $environment);
             $environment = str_replace('CACHE_DRIVER=file', 'CACHE_DRIVER=redis', $environment);
