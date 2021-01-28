@@ -12,6 +12,7 @@ This setup includes:
  * Mailhog (local mail development)
  * Xdebug
  * Node, npm and yarn
+ * Laravel Dusk E2E browser testing. Use `dock dusk`
 
 ## Installation 
 
@@ -55,7 +56,8 @@ Laravel commands:
  
   * ssh        SSH into laravel
   * ssh-mysql  SSH into mysql
-  * dusk       run dusk tests. 'dock dusk' or append: 'dock dusk --group=foo' 
+  * dusk       run dusk tests. 'dock dusk' or append: 'dock dusk --group=foo'
+  * dusk-fails run dusk failing tests 
   * c          run composer commands. 'dock c dump-autoload'
   * composer   run composer commands. 'dock composer dump-autoload'
   * art        run artisan commands. 'dock art view:clear'

@@ -226,13 +226,25 @@ fi
 if [ "$1" == "dusk" ]; then
     shift 1
     if [ "$EXEC" == "yes" ]; then
-        docker-compose exec -e "APP_URL=http://laravel.test" -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" php php artisan dusk "$@"
+        # Using env LARAVEL_SAIL=1 for supporting the default DuskTestCase prepare()
+        docker-compose exec -e "LARAVEL_SAIL=1" -e "APP_URL=http://php" -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" php php artisan dusk "$@"
     else
         notRunning
     fi
     exit 0
 fi
 
+# DUSK FAILS
+if [ "$1" == "dusk-fails" ]; then
+   shift 1
+    if [ "$EXEC" == "yes" ]; then
+        # Using env LARAVEL_SAIL=1 for supporting the default DuskTestCase prepare()
+        docker-compose exec -e "LARAVEL_SAIL=1" -e "APP_URL=http://php" -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" php php artisan dusk:fails "$@"
+    else
+        notRunning
+    fi
+    exit 0
+fi
 
 # MYSQL
 if [ "$1" == "ssh-mysql" ]; then
@@ -289,6 +301,7 @@ echo -e " ${GREEN}"
 echo -e "  * ssh        SSH into laravel"
 echo -e "  * ssh-mysql  SSH into mysql"
 echo -e "  * dusk       run dusk tests. '$BASHCMD dusk' or append: '$BASHCMD dusk --group=foo' "
+echo -e "  * dusk-fails run dusk failing tests"
 echo -e "  * c          run composer commands. '$BASHCMD c dump-autoload'"
 echo -e "  * composer   run composer commands. '$BASHCMD composer dump-autoload'"
 echo -e "  * art        run artisan commands. '$BASHCMD art cache:clear'"
