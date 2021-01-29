@@ -83,8 +83,9 @@ JS commands:
 
 ## Credits
 
+Credits to [Chris Fidao](https://github.com/fideloper) for creating Vessel and [Taylor Otwell](https://github.com/taylorotwell) for Sail. 
+
 - [Mads Møller](https://github.com/viezel)
-- [Chris Fidao](https://github.com/fideloper)  
 - [All Contributors](../../contributors)
 
 ## License
