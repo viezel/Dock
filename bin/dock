@@ -274,6 +274,47 @@ if [ "$1" == "worker" ]; then
     exit 0
 fi
 
+# Logs
+if [ "$1" == "logs" ] || [ "$1" == "logs-php" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker logs $(docker ps --filter name=php --format "{{.ID}}")
+    else
+        notRunning
+    fi
+    exit 0
+fi
+
+if [ "$1" == "logs-mysql" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker logs $(docker ps --filter name=mysql --format "{{.ID}}")
+    else
+        notRunning
+    fi
+    exit 0
+fi
+
+if [ "$1" == "logs-queue" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker logs $(docker ps --filter name=queue --format "{{.ID}}")
+    else
+        notRunning
+    fi
+    exit 0
+fi
+
+if [ "$1" == "logs-redis" ]; then
+    shift 1
+    if [ "$EXEC" == "yes" ]; then
+        docker logs $(docker ps --filter name=redis --format "{{.ID}}")
+    else
+        notRunning
+    fi
+    exit 0
+fi
+
 ##########
 ### JS ###
 ##########
@@ -351,6 +392,10 @@ echo -e "  * down       stop containers"
 echo -e "  * stop       stop containers"
 echo -e "  * reset      resetting containers. Careful - you are deleting everything"
 echo -e "  * remove     removing containers. Careful - you are deleting everything"
+echo -e "  * logs       view logs from PHP and Nginx. Use '--follow' to tail it"
+echo -e "  * logs-mysql view logs from MySQL. Use '--follow' to tail it"
+echo -e "  * logs-queue view logs from the queue. Use '--follow' to tail it"
+echo -e "  * logs-redis view logs from Redis. Use '--follow' to tail it"
 echo -e " ${NC}"
 echo -e "------"
 echo -e " "

@@ -49,7 +49,10 @@ Docker commands:
   * stop       stop containers
   * reset      resetting containers. Careful - you are deleting everything
   * remove     removing containers. Careful - you are deleting everything
- 
+  * logs       view logs from PHP and Nginx. Use '--follow' to tail it
+  * logs-mysql view logs from MySQL. Use '--follow' to tail it
+  * logs-queue view logs from the queue. Use '--follow' to tail it
+  * logs-redis view logs from Redis. Use '--follow' to tail it
 ------
  
 Laravel commands: 
