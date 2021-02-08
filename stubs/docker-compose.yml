@@ -37,6 +37,8 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         networks:
             - dock
+        volumes:
+            - 'dockmysql:/var/lib/mysql'
         healthcheck:
             test: [ "CMD", "mysqladmin", "ping" ]
 
@@ -44,6 +46,8 @@ services:
         image: redis
         networks:
             - dock
+        volumes:
+            - 'dockqueue:/data'
 
     redis:
         image: redis
@@ -51,6 +55,8 @@ services:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         networks:
             - dock
+        volumes:
+            - 'dockredis:/data'
         healthcheck:
             test: [ "CMD", "redis-cli", "ping" ]
 
@@ -66,3 +72,10 @@ networks:
     dock:
         driver: bridge
 
+volumes:
+    dockmysql:
+        driver: local
+    dockqueue:
+        driver: local
+    dockredis:
+        driver: local
