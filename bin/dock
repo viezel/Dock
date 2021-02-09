@@ -125,8 +125,8 @@ fi
 
 # REMOVE
 if [ "$1" = "remove" ]; then
-    echo "Removing containers..."
-    docker-compose down
+    echo "Removing containers, volumes, network..."
+    docker-compose down -v
     echo -e "${GREEN}Successfully stopped and removed ${NC}"
     exit 0
 fi
@@ -134,8 +134,8 @@ fi
 # RESET
 if [ "$1" = "reset" ]; then
 
-    echo "Removing containers..."
-    docker-compose down
+    echo "Removing containers, volumes, network..."
+    docker-compose down -v
     echo "${GREEN}Successfully removed!${NC}"
 
     echo "Building containers..."
