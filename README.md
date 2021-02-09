@@ -26,6 +26,14 @@ dock start
 
 Use `dock stop` to stop the development server. 
 
+### Create a testing database 
+
+If you want to have a MySQL testing database, just run:
+
+```bash
+dock testdb
+```
+
 ## Customize Your Docker Setup
 
 If you want to customize the docker setup, then run:
@@ -53,6 +61,7 @@ Docker commands:
   * logs-mysql view logs from MySQL. Use '--follow' to tail it
   * logs-queue view logs from the queue. Use '--follow' to tail it
   * logs-redis view logs from Redis. Use '--follow' to tail it
+  * testdb     create a MySQL test database
 ------
  
 Laravel commands: 
