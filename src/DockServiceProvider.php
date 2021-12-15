@@ -37,8 +37,8 @@ class DockServiceProvider extends ServiceProvider implements DeferrableProvider
             $this->call('vendor:publish', ['--tag' => 'dock']);
 
             file_put_contents(base_path('docker-compose.yml'), str_replace(
-                './vendor/viezel/dock/runtimes/8.0',
-                './docker/8.0',
+                './vendor/viezel/dock/runtimes/8.1',
+                './docker/8.1',
                 file_get_contents(base_path('docker-compose.yml'))
             ));
         })->purpose('Publish the Docker files for customization');

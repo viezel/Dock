@@ -5,7 +5,7 @@ Local development based on Docker for Laravel.
 This setup includes:
 
  * Nginx (latest)
- * PHP 8.0
+ * PHP 8.1
  * MySQL 8.0
  * Redis Caching
  * Redis Queue
